@@ -4,6 +4,8 @@ namespace ConcurrentQueueBenchmarking
 {
     class Program
     {
+        private const int QUEUE_ACTIONS_PER_THREAD = 1000000;
+
         static void Main(string[] args)
         {
             var threads = new [] { 2, 4, 8, 16, 32 };
@@ -11,7 +13,7 @@ namespace ConcurrentQueueBenchmarking
             Benchmarker.RunMany(threads, i => {
                 var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue.Enqueue", i,
                     (_, cqb) => {
-                        for (int j = 0; j < 100000; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
                             cqb.Queue.Enqueue(100);
                         }});
 
@@ -21,13 +23,13 @@ namespace ConcurrentQueueBenchmarking
             Benchmarker.RunMany(threads, i => {
                 var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue.TryDequeue", i,
                     cqb => {
-                        for (int j = 0; j < 100000; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
                             cqb.Queue.Enqueue(100);
                         }
                     }, (_, cqb) => {
                         int k;
 
-                        for (int j = 0; j < 100000 / cqb.NumThreads; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / cqb.NumThreads; ++j) {
                             cqb.Queue.TryDequeue(out k);
                         }
                     });
@@ -38,7 +40,7 @@ namespace ConcurrentQueueBenchmarking
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.Enqueue", i,
                     (_, mtqb) => {
-                        for (int j = 0; j < 100000; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
                             mtqb.Queue.Enqueue(100);
                         }});
 
@@ -48,13 +50,13 @@ namespace ConcurrentQueueBenchmarking
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.TryDequeue", i,
                     mtqb => {
-                        for (int j = 0; j < 100000; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
                             mtqb.Queue.Enqueue(100);
                         }
                     }, (_, mtqb) => {
                         int k;
 
-                        for (int j = 0; j < 100000 / mtqb.NumThreads; ++j) {
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / mtqb.NumThreads; ++j) {
                             mtqb.Queue.TryDequeue(out k);
                         }
                     });
