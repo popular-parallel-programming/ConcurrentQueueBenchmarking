@@ -44,6 +44,23 @@ namespace ConcurrentQueueBenchmarking
 
                 qb.Run();
             });
+
+            Benchmarker.RunMany(threads, i => {
+                var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.TryDequeue", i,
+                    mtqb => {
+                        for (int j = 0; j < 100000; ++j) {
+                            mtqb.Queue.Enqueue(100);
+                        }
+                    }, (_, mtqb) => {
+                        int k;
+
+                        for (int j = 0; j < 100000 / mtqb.NumThreads; ++j) {
+                            mtqb.Queue.TryDequeue(out k);
+                        }
+                    });
+
+                qb.Run();
+            });
         }
     }
 }
