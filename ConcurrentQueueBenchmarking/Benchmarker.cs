@@ -133,12 +133,15 @@ namespace ConcurrentQueueBenchmarking
             }
 
             for (int i = 0; i < this.Iterations; ++i) {
+                // 1. Run setup code
                 this.Setup();
 
+                // 2. Run benchmark and time result
                 stopWatch.Restart();
                 Compiler.ConsumeValue(this.Benchmark());
                 stopWatch.Stop();
 
+                // 3. Shutdown benchmark, record measurement and force garbage collection
                 this.Shutdown();
                 this.Measurements.Add(stopWatch.Elapsed.TotalMilliseconds);
                 this.ForceGarbageCollection();
