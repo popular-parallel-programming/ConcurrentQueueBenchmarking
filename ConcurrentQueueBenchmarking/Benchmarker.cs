@@ -123,9 +123,6 @@ namespace ConcurrentQueueBenchmarking
             Console.WriteLine("WARNING: You are benchmarking in DEBUG mode");
             #endif
 
-            // Force full garbage collection
-            this.ForceGarbageCollection();
-
             var stopWatch = new Stopwatch();
 
             for (int i = 0; i < this.Warmups; ++i) {
@@ -135,6 +132,7 @@ namespace ConcurrentQueueBenchmarking
             for (int i = 0; i < this.Iterations; ++i) {
                 // 1. Run setup code
                 this.Setup();
+                ForceGarbageCollection();
 
                 // 2. Run benchmark and time result
                 stopWatch.Restart();
