@@ -32,7 +32,7 @@ namespace ConcurrentQueueBenchmarking
 
         public bool TryDequeue(out T t)
         {
-            while (size.Value > 0) {
+            //while (size.Value > 0) {
                 for (int c = 0, i = CurrentStripe;
                      c < queues.Length;
                      i = (i + 1) & (queues.Length - 1), ++c) {
@@ -41,7 +41,7 @@ namespace ConcurrentQueueBenchmarking
                         return true;
                     }
                 }
-            }
+            //}
             t = default(T);
             return false;
         }
