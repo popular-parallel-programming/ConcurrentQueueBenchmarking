@@ -6,7 +6,7 @@ namespace ConcurrentQueueBenchmarking
     {
         static void Main(string[] args)
         {
-            var threads = new [] { 2, 4, 8, 16 };
+            var threads = new [] { 2, 4, 8, 16, 32 };
 
             Benchmarker.RunMany(threads, i => {
                 var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue.Enqueue", i,
