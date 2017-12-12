@@ -157,7 +157,7 @@ namespace ConcurrentQueueBenchmarking
 
         public static void PrintHeader()
         {
-            Console.WriteLine("{0,-25}\t{1,10:0.000} {2,10:0.000} {3,6:0.000} {4,5}",
+            Console.WriteLine("{0,-25}\t{1,10} {2,10} {3,6} {4,5}",
                 "Name",
                 "Threads",
                 "Mean",
