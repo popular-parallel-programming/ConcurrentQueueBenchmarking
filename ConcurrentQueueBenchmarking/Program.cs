@@ -10,6 +10,7 @@ namespace ConcurrentQueueBenchmarking
         {
             var threads = new [] { 2, 4, 8, 16, 32 };
 
+            // 1. ConcurrentQueue.Enqueue
             Benchmarker.RunMany(threads, i => {
                 var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue.Enqueue", i,
                     (_, cqb) => {
@@ -20,6 +21,7 @@ namespace ConcurrentQueueBenchmarking
                 qb.Run();
             });
 
+            // 2. ConcurrentQueue.TryDequeue
             Benchmarker.RunMany(threads, i => {
                 var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue.TryDequeue", i,
                     cqb => {
@@ -37,6 +39,7 @@ namespace ConcurrentQueueBenchmarking
                 qb.Run();
             });
 
+            // 1. MultiTailQueue.Enqueue
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.Enqueue", i,
                     (_, mtqb) => {
@@ -47,6 +50,7 @@ namespace ConcurrentQueueBenchmarking
                 qb.Run();
             });
 
+            // 2. MultiTailQueue.TryDequeue
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.TryDequeue", i,
                     mtqb => {
