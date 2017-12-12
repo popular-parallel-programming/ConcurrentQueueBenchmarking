@@ -39,6 +39,27 @@ namespace ConcurrentQueueBenchmarking
                 qb.Run();
             });
 
+            // 3. Multiple threads enqueue, one thread dequeues
+            Benchmarker.RunMany(threads, i => {
+                var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue (1 thread dequeues)", i,
+                    (id, cqb) => {
+                        if (id == cqb.NumThreads - 1) {
+                            // Dequeuer thread
+                            int k;
+
+                            for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
+                                cqb.Queue.TryDequeue(out k);
+                            }
+                        } else {
+                            for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / (cqb.NumThreads - 1); ++j) {
+                                cqb.Queue.Enqueue(100);
+                            }
+                        }
+                    });
+
+                qb.Run();
+            });
+
             // 1. MultiTailQueue.Enqueue
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.Enqueue", i,
@@ -62,6 +83,27 @@ namespace ConcurrentQueueBenchmarking
 
                         for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / mtqb.NumThreads; ++j) {
                             mtqb.Queue.TryDequeue(out k);
+                        }
+                    });
+
+                qb.Run();
+            });
+
+            // 3. Multiple threads enqueue, one thread dequeues
+            Benchmarker.RunMany(threads, i => {
+                var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue (1 thread dequeues)", i,
+                    (id, cqb) => {
+                        if (id == cqb.NumThreads - 1) {
+                            // Dequeuer thread
+                            int k;
+
+                            for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
+                                cqb.Queue.TryDequeue(out k);
+                            }
+                        } else {
+                            for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / (cqb.NumThreads - 1); ++j) {
+                                cqb.Queue.Enqueue(100);
+                            }
                         }
                     });
 
