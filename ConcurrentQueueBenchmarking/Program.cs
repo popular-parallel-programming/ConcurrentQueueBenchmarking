@@ -60,6 +60,20 @@ namespace ConcurrentQueueBenchmarking
                 qb.Run();
             });
 
+            // 4. Multiple threads dequeue from an empty queue
+            Benchmarker.RunMany(threads, i => {
+                var qb = new ConcurrentQueueBenchmarker<int>("ConcurrentQueue dequeuing", i,
+                    (_, cqb) => {
+                        int k;
+
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
+                            cqb.Queue.TryDequeue(out k);
+                        }
+                    });
+
+                qb.Run();
+            });
+
             // 1. MultiTailQueue.Enqueue
             Benchmarker.RunMany(threads, i => {
                 var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue.Enqueue", i,
@@ -104,6 +118,20 @@ namespace ConcurrentQueueBenchmarking
                             for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD / (cqb.NumThreads - 1); ++j) {
                                 cqb.Queue.Enqueue(100);
                             }
+                        }
+                    });
+
+                qb.Run();
+            });
+
+            // 4. Multiple threads dequeue from an empty queue
+            Benchmarker.RunMany(threads, i => {
+                var qb = new MultiTailQueueBenchmarker<int>("MultiTailQueue dequeuing", i,
+                    (_, mtqb) => {
+                        int k;
+
+                        for (int j = 0; j < QUEUE_ACTIONS_PER_THREAD; ++j) {
+                            mtqb.Queue.TryDequeue(out k);
                         }
                     });
 
